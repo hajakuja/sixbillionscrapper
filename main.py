@@ -8,14 +8,25 @@ import json
 COUNT = 0
 CURL = 'https://killsixbilliondemons.com/comic/kill-six-billion-demons-chapter-1/'
 
-def get_chapter(url):
+
+def get_next_url():
+    global soup
+    load_soup()
+    return soup.select(".navi-next")[0].get('href')
+
+def load_soup():
     global CURL
-    CURL = url
-    print("Url: %s" %(url))
-    res = requests.get(url)
+    global soup
+    print("Url: %s" %(CURL))
+    res = requests.get(CURL)
     res.raise_for_status()
     soup = BeautifulSoup(res.content, features='html.parser')
-    nextUrl = soup.select(".navi-next")[0].get('href')
+
+def get_chapter():
+    global CURL
+    global COUNT
+    global soup
+    load_soup()
     comicElem = soup.select('#comic img')
     res =  requests.get(comicElem[0].get('src'))
     if comicElem == []:        
@@ -43,7 +54,9 @@ def get_chapter(url):
         for chunk in res.iter_content(10000):
             imageFile.write(chunk)
         imageFile.close()
-    return nextUrl
+        COUNT += 1
+        write_info()
+    return get_next_url()
 
 def write_info():
     global CURL
@@ -60,17 +73,17 @@ def read_info():
             data = json.load(file)
             CURL = data['url']
             COUNT = data['count']
+    CURL = get_next_url()
 
 
 
 def main():
     read_info()
-    url = CURL
-    while url is not None:
-        url = get_chapter(url)
+    global CURL
+    while CURL is not None:
+        CURL = get_chapter()
         global COUNT 
-        COUNT += 1
-    write_info()
+        
     
 
 

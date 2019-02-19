@@ -1,2 +1,2 @@
 # sixbillionscrapper
-Scrapper for killsixbilliondemons.com
+Very simple scrapper for killsixbilliondemons.com

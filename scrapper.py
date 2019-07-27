@@ -13,7 +13,7 @@ def get_next_url():
 
 def load_soup():
     global soup
-    print("Url: %s" %(settings.CURL))
+    #print("Url: {}".format(settings.CURL))
     res = requests.get(settings.CURL)
     res.raise_for_status()
     soup = BeautifulSoup(res.content, features='html.parser')
@@ -28,14 +28,14 @@ def get_chapter():
     else:
         comicUrl = comicElem[0].get('src')        
         # Download the image.
-        print('Downloading image %s...' % (comicUrl))        
+        print('Downloading image {}...'.format(comicUrl))        
         res = requests.get(comicUrl)        
         res.raise_for_status()
         if not os.path.exists('images'):
             os.mkdir('images')
         comicPath = html.unescape(os.path.basename(comicUrl))
         path = os.path.join('images', str(settings.COUNT) + comicPath)
-        print("Writing image %s..." % (os.path.basename(path)))
+        print("Writing image {}...".format(os.path.basename(path)))
         try:
             imageFile = open(path, 'wb')
         except OSError as e:

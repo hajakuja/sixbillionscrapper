@@ -47,12 +47,13 @@ def get_image():
         try:
             imageFile = open(path, 'wb')
         except OSError as e:
-            if e.args[0] is 22:
-                # comicPath = comicPath[2:]
-                path = os.path.join('images', str(settings.COUNT)+'.jpg')# + comicPath)
-                imageFile = open(path, 'wb')
-            else:
-                print(e)
+            # if e.args[0] is 22:
+            #     # comicPath = comicPath[2:]
+            #     path = os.path.join('images', str(settings.COUNT)+'.jpg')# + comicPath)
+            #     imageFile = open(path, 'wb')
+            # else:
+            print(e)
+            return
         for chunk in res.iter_content(10000):
             imageFile.write(chunk)
         imageFile.close()
@@ -70,9 +71,12 @@ def get_text():
             os.mkdir('entries')
 
     path = os.path.join('entries', str(settings.COUNT)+'.html')
-    with open(path, 'w') as textFile:
-        textFile.write(text)
-
+    try:
+        with open(path, 'w') as textFile:
+            textFile.write(text)
+    except OSError as e:
+        print(e)
+        return
 
 def write_info():
     data = {'url':settings.CURL,  'count':settings.COUNT}
@@ -82,9 +86,13 @@ def write_info():
 def read_info():
     if os.path.exists('info.json'):
         with open('info.json', 'r') as file:
-            data = json.load(file)
-            settings.CURL = data['url']
-            settings.COUNT = data['count']
+            try:
+                data = json.load(file)
+                settings.CURL = data['url']
+                settings.COUNT = data['count']
+            except json.JSONDecodeError as e:
+                print(e)
+                return
         settings.CURL = get_next_url()
 
 if __name__ == "__main__":

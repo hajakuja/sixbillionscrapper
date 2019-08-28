@@ -1,4 +1,7 @@
+test
+__pycache__
 env
 images
+entries
 .vscode
 info.json

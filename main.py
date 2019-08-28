@@ -4,9 +4,7 @@ import settings
 
 
 def main():
-    scrapper.read_info()
-    while settings.CURL is not None:
-        settings.CURL = scrapper.get_chapter()
+        scrapper.get_chapter()
          
         
     

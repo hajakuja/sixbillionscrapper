@@ -19,8 +19,16 @@ def load_soup():
     soup = BeautifulSoup(res.content, features='html.parser')
 
 def get_chapter():
+    read_info()
+    while settings.CURL is not None:
+        global soup
+        load_soup()
+        get_text()
+        settings.CURL = get_image()
+
+def get_image():
     global soup
-    load_soup()
+    # load_soup()
     comicElem = soup.select('#comic img')
     res =  requests.get(comicElem[0].get('src'))
     if comicElem == []:        
@@ -33,15 +41,15 @@ def get_chapter():
         res.raise_for_status()
         if not os.path.exists('images'):
             os.mkdir('images')
-        comicPath = html.unescape(os.path.basename(comicUrl))
-        path = os.path.join('images', str(settings.COUNT) + comicPath)
+        # comicPath = html.unescape(os.path.basename(comicUrl))
+        path = os.path.join('images', str(settings.COUNT)+'.jpg') #+ comicPath)
         print("Writing image {}...".format(os.path.basename(path)))
         try:
             imageFile = open(path, 'wb')
         except OSError as e:
             if e.args[0] is 22:
-                comicPath = comicPath[2:]
-                path = os.path.join('images', str(settings.COUNT) + comicPath)
+                # comicPath = comicPath[2:]
+                path = os.path.join('images', str(settings.COUNT)+'.jpg')# + comicPath)
                 imageFile = open(path, 'wb')
             else:
                 print(e)
@@ -51,6 +59,20 @@ def get_chapter():
         settings.COUNT += 1
         write_info()
     return get_next_url()
+
+def get_text():
+    global soup
+    alt = soup.select('#comic img')[0].get('alt')
+    t = [a.prettify() for a in soup.find_all('div', {'class':'entry'})[0].select('p')]
+
+    text = '<p>AltText: {}</p> \n\n<div><p>Entry(might be empty):</p> \n{}</div>'.format(alt, '\n'.join(t) )
+    if not os.path.exists('entries'):
+            os.mkdir('entries')
+
+    path = os.path.join('entries', str(settings.COUNT)+'.html')
+    with open(path, 'w') as textFile:
+        textFile.write(text)
+
 
 def write_info():
     data = {'url':settings.CURL,  'count':settings.COUNT}
@@ -63,4 +85,7 @@ def read_info():
             data = json.load(file)
             settings.CURL = data['url']
             settings.COUNT = data['count']
-    settings.CURL = get_next_url()
+        settings.CURL = get_next_url()
+
+if __name__ == "__main__":
+    get_chapter()

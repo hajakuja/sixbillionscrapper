@@ -3,5 +3,6 @@ __pycache__
 env
 images
 entries
+downloads
 .vscode
 info.json

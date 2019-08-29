@@ -8,7 +8,7 @@ import settings
 
 def get_next_url():
     global soup
-    load_soup()
+    # load_soup()
     return soup.select(".navi-next")[0].get('href')
 
 def load_soup():
@@ -24,7 +24,8 @@ def get_chapter():
         global soup
         load_soup()
         get_text()
-        settings.CURL = get_image()
+        get_image()
+        # settings.CURL = get_image()
 
 def get_image():
     global soup
@@ -39,10 +40,16 @@ def get_image():
         print('Downloading image {}...'.format(comicUrl))        
         res = requests.get(comicUrl)        
         res.raise_for_status()
-        if not os.path.exists('images'):
-            os.mkdir('images')
+        
+        # create the directory
+        if not os.path.exists(r'./downloaded'):
+            os.mkdir('downloaded')
+            os.mkdir(r'./downloaded/images')
+        elif not os.path.exists(r'./downloaded/images'):
+            os.mkdir(r'./downloaded/images')
+        
         # comicPath = html.unescape(os.path.basename(comicUrl))
-        path = os.path.join('images', str(settings.COUNT)+'.jpg') #+ comicPath)
+        path = os.path.join(r'downloaded/images', str(settings.COUNT)+'.jpg') #+ comicPath)
         print("Writing image {}...".format(os.path.basename(path)))
         try:
             imageFile = open(path, 'wb')
@@ -58,34 +65,39 @@ def get_image():
             imageFile.write(chunk)
         imageFile.close()
         settings.COUNT += 1
+        settings.CURL = get_next_url()
         write_info()
-    return get_next_url()
 
 def get_text():
     global soup
+    # get the alt and content
     alt = soup.select('#comic img')[0].get('alt')
     t = [a.prettify() for a in soup.find_all('div', {'class':'entry'})[0].select('p')]
+    text = '<p>AltText: {}</p> \n\n<div><p>Entry(might be empty):</p> \n{}</div>'.format(alt, '\n'.join(t))
+    
+    # create directory
+    if not os.path.exists('downloaded'):
+        os.mkdir('downloaded')
+        os.mkdir(r'./downloaded/entries')
+    elif not os.path.exists(r'./downloaded/entries'):
+        os.mkdir(r'./downloaded/entries')
 
-    text = '<p>AltText: {}</p> \n\n<div><p>Entry(might be empty):</p> \n{}</div>'.format(alt, '\n'.join(t) )
-    if not os.path.exists('entries'):
-            os.mkdir('entries')
-
-    path = os.path.join('entries', str(settings.COUNT)+'.html')
+    path = os.path.join(r'downloaded/entries', str(settings.COUNT)+'.html')
     try:
         with open(path, 'w') as textFile:
-            textFile.write(text)
+            textFile.write(text.encode(encoding='UTF-8').decode())
     except OSError as e:
         print(e)
         return
 
 def write_info():
     data = {'url':settings.CURL,  'count':settings.COUNT}
-    with open('info.json', 'w') as file:
+    with open(r'./downloaded/info.json', 'w') as file:
         json.dump(data, file)
 
 def read_info():
-    if os.path.exists('info.json'):
-        with open('info.json', 'r') as file:
+    if os.path.exists(r'downloaded/info.json'):
+        with open(r'downloaded/info.json', 'r') as file:
             try:
                 data = json.load(file)
                 settings.CURL = data['url']
@@ -93,7 +105,7 @@ def read_info():
             except json.JSONDecodeError as e:
                 print(e)
                 return
-        settings.CURL = get_next_url()
+        # settings.CURL = get_next_url()
 
 if __name__ == "__main__":
     get_chapter()

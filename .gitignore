@@ -1,8 +1,9 @@
 test
-__pycache__
+__pycache__/
+*.py[cod]
 env
 images
 entries
-downloads
+downloaded
 .vscode
 info.json

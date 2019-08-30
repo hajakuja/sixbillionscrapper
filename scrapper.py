@@ -42,14 +42,14 @@ def get_image():
         res.raise_for_status()
         
         # create the directory
-        if not os.path.exists(r'./downloaded'):
-            os.mkdir('downloaded')
-            os.mkdir(r'./downloaded/images')
-        elif not os.path.exists(r'./downloaded/images'):
-            os.mkdir(r'./downloaded/images')
+        if not os.path.exists(os.path.split(settings.IMAGES_PATH)[0]):
+            os.mkdir(os.path.split(settings.IMAGES_PATH)[0])
+            os.mkdir(settings.IMAGES_PATH)
+        elif not os.path.exists(settings.IMAGES_PATH):
+            os.mkdir(settings.IMAGES_PATH)
         
         # comicPath = html.unescape(os.path.basename(comicUrl))
-        path = os.path.join(r'downloaded/images', str(settings.COUNT)+'.jpg') #+ comicPath)
+        path = os.path.join(settings.IMAGES_PATH, str(settings.COUNT)+'.jpg') #+ comicPath)
         print("Writing image {}...".format(os.path.basename(path)))
         try:
             imageFile = open(path, 'wb')
@@ -76,13 +76,13 @@ def get_text():
     text = '<p>AltText: {}</p> \n\n<div><p>Entry(might be empty):</p> \n{}</div>'.format(alt, '\n'.join(t))
     
     # create directory
-    if not os.path.exists('downloaded'):
-        os.mkdir('downloaded')
-        os.mkdir(r'./downloaded/entries')
-    elif not os.path.exists(r'./downloaded/entries'):
-        os.mkdir(r'./downloaded/entries')
+    if not os.path.exists(os.path.split(settings.ENTRIES_PATH)[0]):
+        os.mkdir(os.path.split(settings.ENTRIES_PATH)[0])
+        os.mkdir(settings.ENTRIES_PATH)
+    elif not os.path.exists(settings.ENTRIES_PATH):
+        os.mkdir(settings.ENTRIES_PATH)
 
-    path = os.path.join(r'downloaded/entries', str(settings.COUNT)+'.html')
+    path = os.path.join(settings.ENTRIES_PATH, str(settings.COUNT)+'.html')
     try:
         with open(path, 'w') as textFile:
             textFile.write(text.encode(encoding='UTF-8').decode())
@@ -92,12 +92,12 @@ def get_text():
 
 def write_info():
     data = {'url':settings.CURL,  'count':settings.COUNT}
-    with open(r'./downloaded/info.json', 'w') as file:
+    with open(settings.INFO_PATH, 'w') as file:
         json.dump(data, file)
 
 def read_info():
-    if os.path.exists(r'downloaded/info.json'):
-        with open(r'downloaded/info.json', 'r') as file:
+    if os.path.exists(settings.INFO_PATH):
+        with open(settings.INFO_PATH, 'r') as file:
             try:
                 data = json.load(file)
                 settings.CURL = data['url']

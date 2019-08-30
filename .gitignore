@@ -7,3 +7,5 @@ entries
 downloaded
 .vscode
 info.json
+__pycache__/scrapper.cpython-37.pyc
+__pycache__/settings.cpython-37.pyc

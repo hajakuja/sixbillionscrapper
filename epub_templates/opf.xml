@@ -10,19 +10,22 @@
     <dc:date>{{ date }}</dc:date>
   </metadata>
   <manifest>
-    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
-    <item href="toc.html" id="toc" media-type="application/xhtml+xml"/>
+    <item href="content.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+    <!-- <item href="toc.html" id="toc" media-type="application/xhtml+xml"/> -->
+    <item id="cover-image" href="images/cover.png" media-type="image/png"/>
+    <item id="css" href="css/style.css" media-type="text/css"/>
     {% for chapter in chapters %}
     <item href="{{ chapter.link }}" id="{{ chapter.id }}" media-type="application/xhtml+xml"/>
+    <item href="{{ chapter.image_link }}" id="{{ chapter.img_id }}" media-type="image/jpeg"/>
     {% endfor %}
   </manifest>
   <spine toc="ncx">
-    <itemref idref="toc"/>
+    <!-- <itemref idref="toc"/> -->
     {% for chapter in chapters %}
     <itemref idref="{{ chapter.id }}"/>
     {% endfor %}
   </spine>
-  <guide>
+  <!-- <guide>
     <reference type="toc" title="Table of Contents" href="toc.html"/>
-  </guide>
+  </guide> -->
 </package>

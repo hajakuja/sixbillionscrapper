@@ -1,10 +1,11 @@
 import scrapper
 import settings
-
+import epubgen
 
 
 def main():
         scrapper.get_chapter()
+        epubgen.make_epub()
          
         
     

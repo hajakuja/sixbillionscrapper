@@ -84,8 +84,8 @@ def get_text():
 
     path = os.path.join(settings.ENTRIES_PATH, str(settings.COUNT)+'.html')
     try:
-        with open(path, 'w') as textFile:
-            textFile.write(text.encode(encoding='UTF-8').decode())
+        with open(path, 'w', encoding="utf-8") as textFile:
+            textFile.write(text)
     except OSError as e:
         print(e)
         return

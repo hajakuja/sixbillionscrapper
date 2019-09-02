@@ -1,0 +1,148 @@
+body { 
+  width: 641px;
+  height: 986px;
+  margin: 0;
+  padding:0;
+}
+
+body.white { 
+  background-color: white;
+}
+
+body.black { 
+  background-color: #151515;
+}
+
+.full-bleed {
+  width: 641px;
+  height: 986px;
+  position: relative;
+  padding: 0;
+  margin: 0;
+  left: 0;
+}
+
+.full-bleed img {
+  margin: 0;
+  padding: 0;
+  left: 0;
+  position: absolute;
+}
+
+div.popup {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 300px;
+  height: auto;
+  padding: 20px;
+  z-index: 2;
+  color: black;
+  background-color: white;
+  -webkit-transition: opacity 1s;
+  -webkit-box-shadow: -10px 10px 10px #888;
+}
+
+div.popup img {
+  padding: 20px;
+  display: block;
+  z-index: 2;
+}
+
+.popup a {
+  color: blue;
+  text-decoration: none;
+  z-index: 2;
+}
+
+table#upselltable tr td.fullrule {
+  border-top: 1px solid #cccccc;
+}
+
+div#pagepromo table#upselltable tr td.book {
+  width: 60px;
+}
+
+div#pagepromo table#upselltable tr td span.headline {
+  font-family: HelveticaNeue-Light;
+  font-weight: normal;
+  font-size: 24px;
+  display: block;
+  padding-bottom: 6px;
+}
+
+div#pagepromo table#upselltable tr td span.subheadline {
+  font-family: HelveticaNeue-Light;
+  font-weight: normal;
+  font-size: 15px;
+  display: block;
+  padding-bottom: 6px;
+}
+
+div#pagepromo table#upselltable tr td span.copy {
+  font-family: HelveticaNeue-Light;
+  font-weight: normal;
+  font-size: 12px;
+  display: block;
+}
+
+div#pagepromo table#upselltable tr td a {
+  font-family: HelveticaNeue-CondensedBold;
+  font-size: 5.75px;
+  text-decoration: none;
+}
+
+div#pagepromo table#upselltable tr#upsellappblock {
+  border: 1px solid #cccccc; 
+}
+
+span.booktitle {
+  display: block;
+  padding: 0px;
+  margin:  0px;
+}
+
+div#subunit {
+  color: #999999;
+  font-family: HelveticaNeue-CondensedBold;
+  font-weight: normal;
+  font-size: 12px;
+  padding-top: 6px;
+}
+
+table#socialupsell tr td {
+  padding: 5px 10px 0 0;
+}
+
+img.upsellcover {
+  width: 60px;
+  height: 95px;
+  border: 0px;
+  position: relative;
+}
+
+img.upsellapp {
+  width: 148px;
+  height: 111px;
+  position: relative;
+}
+
+img.appstore {
+  width: 81px;
+  height: 28px;
+  position: relative;	
+  padding-top: 9px;
+}
+
+img#btnshare {
+  width: 69px;
+  height: 27px;
+  position: relative;	
+}
+
+img#btntweet {
+  width: 75px;
+  height: 27px;
+  position: relative;	
+}

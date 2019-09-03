@@ -21,7 +21,7 @@ def make_epub():
     make_file()
 
     # finally delete the temp folder 
-    shutil.rmtree('epub')
+    # shutil.rmtree('epub')
 
 def load_settings():
     if os.path.exists(settings.INFO_PATH):
@@ -51,8 +51,8 @@ def load_chapters():
     if not os.path.exists('epub/OPS/images'):
         os.mkdir('epub/OPS/images')
 
-    for src in os.listdir(settings.IMAGES_PATH):
-        shutil.copyfile(settings.IMAGES_PATH+src, 'epub/OPS/images/'+src)
+    # for src in os.listdir(settings.IMAGES_PATH):
+    #     shutil.copyfile(settings.IMAGES_PATH+src, 'epub/OPS/images/'+src)
 
 
 
@@ -114,14 +114,20 @@ def make_pages():
 
     position = ('rightspread', 'leftspread')
 
+    entry = ''
     template = env.get_template('page.html')
     for chapter in chapters:
+        if settings.INCLUDE_ENTRIES:
+            entry = open(settings.ENTRIES_PATH + str(chapter['play_order']) + '.html', 'r', encoding='utf-8').read()
+
         with open('epub/OPS/{}.xhtml'.format(chapter['id']), 'w') as  page:
             page.write(template.render(
                 name  = settings.TITLE,
                 page_id = chapter['id'],
                 image_link = chapter['image_link'],
-                pos = position[chapter['play_order']%2]
+                pos = position[chapter['play_order']%2],
+                entries = settings.INCLUDE_ENTRIES,
+                entry = entry,
             ))
     
 def make_file():

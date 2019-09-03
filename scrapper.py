@@ -10,6 +10,7 @@ def get_next_url():
     global soup
     # load_soup()
     return soup.select(".navi-next")[0].get('href')
+    
 
 def load_soup():
     global soup
@@ -20,12 +21,15 @@ def load_soup():
 
 def get_chapter():
     read_info()
-    while settings.CURL is not None:
+    while get_next_url() is not None:
         global soup
         load_soup()
         get_text()
         get_image()
-        # settings.CURL = get_image()
+        settings.COUNT += 1
+        prev_url = settings.CURL
+        settings.CURL = get_next_url()
+        write_info(prev_url)
 
 def get_image():
     global soup
@@ -64,9 +68,7 @@ def get_image():
         for chunk in res.iter_content(10000):
             imageFile.write(chunk)
         imageFile.close()
-        settings.COUNT += 1
-        settings.CURL = get_next_url()
-        write_info()
+        
 
 def get_text():
     global soup
@@ -90,8 +92,8 @@ def get_text():
         print(e)
         return
 
-def write_info():
-    data = {'url':settings.CURL,  'count':settings.COUNT}
+def write_info(prev_url):
+    data = {'url':settings.CURL if settings.CURL != 'null' else prev_url,  'count':settings.COUNT}
     with open(settings.INFO_PATH, 'w') as file:
         json.dump(data, file)
 

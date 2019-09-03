@@ -10,5 +10,10 @@
     <div id="{{ page_id }}" class="full-bleed {{ pos }}">
       <img src="{{ image_link }}" width="641" height="986" alt="page"/>
     </div>
+    {% if entries %}
+    <div>
+      {{ entry }}
+    </div>>
+    {% endif %}
   </body>
 </html>
